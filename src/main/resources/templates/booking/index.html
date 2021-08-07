@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>RentYourCar</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
+  <h1>My Bookings</h1>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>City</th>
+      <th>Car</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}">
+      <td th:text="${booking.listing.city}"></td>
+      <td th:text="${booking.listing.carName}"></td>
+      <td th:text="${booking.listing.fromDate}"></td>
+      <td th:text="${booking.listing.toDate}"></td>
+      <td th:text="${booking.status}"></td>
+      <td>
+        <a class="btn btn-sm btn-primary" th:href="@{|/listing/${booking.listing.id}|}">See Listing</a>
+        <a th:unless="${booking.status == T(com.lnu.RentYourCar.Booking.BookingStatus).CANCELLED}"
+           class="btn btn-sm btn-danger"
+           th:href="@{|/booking/${booking.id}/cancel|}"
+        >Cancel
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div th:unless="${#lists.isEmpty(listings)}">
+    <h1>My Listings bookings</h1>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>City</th>
+        <th>Car</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Booked By</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="lst : ${listings}">
+        <tr th:each="booking : ${lst.bookings}">
+          <td th:text="${booking.listing.city}"></td>
+          <td th:text="${booking.listing.carName}"></td>
+          <td th:text="${booking.listing.fromDate}"></td>
+          <td th:text="${booking.listing.toDate}"></td>
+          <td th:text="${booking.customer.name}"></td>
+          <td th:text="${booking.status}"></td>
+          <td>
+            <a class="btn btn-sm btn-primary" th:href="@{|/listing/${booking.listing.id}|}">See Listing</a>
+            <a th:unless="${booking.status == T(com.lnu.RentYourCar.Booking.BookingStatus).CANCELLED} or ${booking.status == T(com.lnu.RentYourCar.Booking.BookingStatus).COMPLETED}"
+               class="btn btn-sm btn-danger"
+               th:href="@{|/booking/${booking.id}/cancel|}"
+            >Cancel
+            </a>
+            <a th:if="${booking.status == T(com.lnu.RentYourCar.Booking.BookingStatus).PENDING}"
+               class="btn btn-sm btn-success"
+               th:href="@{|/booking/${booking.id}/accept|}"
+            >Accept
+            </a>
+            <a th:if="${booking.status == T(com.lnu.RentYourCar.Booking.BookingStatus).ACCEPTED}"
+               class="btn btn-sm btn-success"
+               th:href="@{|/booking/${booking.id}/complete|}"
+            >Complete
+            </a>
+          </td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UEN zmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+</body>
+</html>

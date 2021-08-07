@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>RentYourCar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="container">
+        <div class="card mt-5">
+            <h5 class="card-header">Listing Details</h5>
+            <div class="card-body">
+                <div class="form-group">
+                    <img th:src="@{${listing.photosImagePath}}" height="300" width="400">
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:inline="text">Car name: [[${listing.carName}]]</li>
+                    <li class="list-group-item" th:inline="text">From: [[${listing.fromDate} ? ${#temporals.format(listing.fromDate, 'yyyy-MM-dd')}: '']]</li>
+                    <li class="list-group-item" th:inline="text">To: [[${listing.toDate} ? ${#temporals.format(listing.toDate, 'yyyy-MM-dd')}: '']]</li>
+                    <li class="list-group-item" th:inline="text">Price: [[${listing.price}]]</li>
+                    <li class="list-group-item" th:inline="text">City: [[${listing.city}]]</li>
+                    <li class="list-group-item" th:inline="text">Car owner: [[${listing.owner.name}]]</li>
+                </ul>
+                <div class="card-body">
+                    <a th:href="@{/}" class="btn btn-warning mr-2">Back</a>
+                    <a sec:authorize="isAuthenticated()" th:unless="${not #lists.isEmpty(listing.bookings)} or ${IsOwner}" th:href="@{|/listing/${listing.id}/book|}" class="btn btn-primary mr-2">Book</a>
+                    <a th:if="${IsOwner}" th:href="@{|/listing/${listing.id}/edit|}" class="btn btn-success mr-2">Edit</a>
+                    <a th:if="${IsOwner}" th:href="@{|/listing/${listing.id}/delete|}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

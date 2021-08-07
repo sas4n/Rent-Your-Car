@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>RentYourCar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
+    <div class="row justify-content-center my-3 col-12">
+        <form th:action="@{/search}" class="form-inline">
+            <input type="text" name="city" class="form-control mx-1 col-2" placeholder="Give city..." required>
+            <label for="from-date" class="mx-1">From date </label>
+            <input type="datetime-local" name="from" class="form-control mx-1 col-3" id="from-date" required/>
+            <label for="to-date" class="mx-1">To date </label>
+            <input type="datetime-local" name="to" class="form-control mx-1 col-3" id="to-date" required/>
+            <button class="btn btn-primary mx-1">Search</button>
+        </form>
+    </div>
+    <a sec:authorize="isAuthenticated()" th:href="@{/listing/add}" class="btn btn-lg btn-success my-5 mx-2">Add new listing</a>
+    <div class="row ">
+        <div class="col my-3" th:each="item : ${listings}">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" height="180" with="268" th:src="@{${item.photosImagePath}}"/>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${item.carName}"></h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:inline="text">[[${#temporals.format(item.fromDate, 'yyyy-MM-dd')}]] - [[${#temporals.format(item.toDate, 'yyyy-MM-dd')}]] </li>
+                        <li class="list-group-item" th:inline="text">Price: [[${item.price}]]kr</li>
+                        <li class="list-group-item" th:inline="text">City: [[${item.city}]]</li>
+                    </ul>
+                    <a th:href="@{|/listing/${item.id}|}" class="btn btn-primary mt-3">Book/See listing</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
